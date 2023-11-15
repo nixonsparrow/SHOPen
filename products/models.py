@@ -13,7 +13,16 @@ from products.utils import get_payment_to_date
 User = get_user_model()
 
 
-class Category(models.Model):
+class BaseModel(models.Model):
+    """Base abstract model to add fields for every other model."""
+    class Meta:
+        abstract = True
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class Category(BaseModel):
     """Categories that can be related to Product objects."""
 
     class Meta:
@@ -26,7 +35,7 @@ class Category(models.Model):
         return self.name
 
 
-class Product(models.Model):
+class Product(BaseModel):
     """Products that Clients are able to purchase in SHOPen."""
 
     class Meta:
@@ -56,7 +65,7 @@ class Product(models.Model):
         return self.name
 
 
-class Item(models.Model):
+class Item(BaseModel):
     """Item is an object that puts Product in Cart with wanted quantity.
     Price field is needed because the price can be different from current one."""
 
@@ -70,7 +79,7 @@ class Item(models.Model):
         return f"{self.product.name} ({self.quantity}) - {self.price:.2f})"
 
 
-class Order(models.Model):
+class Order(BaseModel):
     """Order that User with role Client can place and purchase products by."""
 
     client = models.ForeignKey(

@@ -1,12 +1,15 @@
+from django.db.models import Sum
 from django.http import JsonResponse
 from django.utils.translation import gettext
-from django.views.generic import ListView
+from rest_framework.mixins import ListModelMixin
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ViewSet
+from datetime import datetime
+from django.utils.timezone import make_aware
 
 from .models import Category, Item, Order, Product
 from .serializers import CategorySerializer, OrderSerializer, ProductSerializer
-from .utils import IsClient, IsVendor, ProductPagination
+from .utils import IsClient, IsVendor, DefaultPagination
 
 
 class CategoryViewSet(ModelViewSet):
@@ -61,7 +64,7 @@ class ProductViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, IsVendor]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    pagination_class = ProductPagination
+    pagination_class = DefaultPagination
 
     def get_permissions(self):
         if self.action in ["list", "retrieve"]:
@@ -93,6 +96,37 @@ class ProductViewSet(ModelViewSet):
         return super().list(request, *args, **kwargs)
 
 
-class StatsListView(ListView):
-    def get(self):
-        pass
+class StatsViewSet(ViewSet, ListModelMixin):
+    http_method_names = ["get"]
+    permission_classes = [IsAuthenticated, IsVendor]
+    queryset = Product.objects.all()
+    items = Item.objects.prefetch_related("product")
+
+    def list(self, request, *args, **kwargs):
+        query = self.request.query_params
+
+        # filter items to dates given in params
+        if "from" in query.keys():
+            date_from = make_aware(datetime.strptime(query["from"], '%d-%m-%Y'))
+            self.items = self.items.filter(created_at__gte=date_from)
+        if "to" in query.keys():
+            date_from = make_aware(datetime.strptime(query["to"], '%d-%m-%Y'))
+            self.items = self.items.filter(created_at__lte=date_from)
+
+        # sort products by most popular items
+        stats = []
+        for product in self.queryset:
+            stats.append({"product": product.__str__(), "total": self.items.filter(product_id=product.id).aggregate(Sum("quantity"))["quantity__sum"]})
+        stats.sort(key=lambda p: p["total"], reverse=True)
+
+        # cut the size to fit the limit param
+        if "limit" in query.keys() and (limit := int(query["limit"])) < len(stats):
+            stats = stats[:limit]
+
+        # add positioning
+        for i in range(len(stats)):
+            stats[i].update({"place": i+1})
+
+        return JsonResponse(
+            data=stats, safe=False
+        )

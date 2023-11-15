@@ -7,7 +7,7 @@ def get_payment_to_date(days=5):
     return (timezone.now() + timezone.timedelta(days=days)).date()
 
 
-class ProductPagination(PageNumberPagination):
+class DefaultPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = "page_size"
     max_page_size = 1000

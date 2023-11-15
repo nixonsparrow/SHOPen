@@ -9,12 +9,6 @@ class CategorySerializer(ModelSerializer):
         fields = ("id", "name")
 
 
-class ItemSerializer(ModelSerializer):
-    class Meta:
-        model = Item
-        fields = ("id", "product", "quantity", "price")
-
-
 class OrderSerializer(ModelSerializer):
     class Meta:
         model = Order

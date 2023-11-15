@@ -106,3 +106,19 @@ Example JSON data to add to request:<br>
 ```
 The easiest way to add a product is via the Django REST framework view.<br>
 `"product"` must much the id of Product object in database.
+
+
+### See stats of most popular products
+###### Authorisation needed, role Vendor needed
+
+Endpoint: `GET /api/stats/`
+
+For extra options add one or more parameters to your GET query:
+- `limit=<x>` - output is limited to `<x>` products
+- `from=<DD-MM-YYYY>` - input takes items bought after given date (inclusively)
+- `to=<DD-MM-YYYY>` - input takes items bought before given date (inclusively)
+
+Example usages (one or multiple parameters):<br>
+- `/api/products/?limit=10`
+- `/api/products/?limit=100&from=15-11-2023`
+- `/api/products/?from=15-04-2023&to=20-11-2023`
