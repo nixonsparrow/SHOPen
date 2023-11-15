@@ -1,5 +1,6 @@
 *.sqlite3
-uploads/
+media/images
+media/thumbnails
 __pycache__
 venv
 .idea/

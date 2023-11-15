@@ -1,29 +1,98 @@
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from rest_framework import status
-from rest_framework.decorators import api_view, renderer_classes
-from rest_framework.parsers import JSONParser
-from rest_framework.renderers import JSONRenderer
-from rest_framework.response import Response
+from django.http import JsonResponse
+from django.utils.translation import gettext
+from django.views.generic import ListView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
-from .models import Category, Order, Product
+from .models import Category, Item, Order, Product
 from .serializers import CategorySerializer, OrderSerializer, ProductSerializer
+from .utils import IsClient, IsVendor, ProductPagination
 
 
 class CategoryViewSet(ModelViewSet):
-    http_method_names = ["get", "post"]
+    permission_classes = [IsAuthenticated, IsVendor]
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
 
 class OrderViewSet(ModelViewSet):
     http_method_names = ["get", "post"]
+    permission_classes = [IsAuthenticated, IsClient]
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
+    def get_permissions(self):
+        if self.action in ["list"]:
+            return [permission() for permission in [IsVendor]]
+        else:
+            return super().get_permissions()
+
+    def create(self, request, *args, **kwargs):
+        # create Order
+        cart = request.data.pop("cart")
+        request.data.update({"client": self.request.user.id})
+        response = super().create(request, *args, **kwargs)
+
+        # add items from cart to Order
+        new_order = Order.objects.get(id=response.data["id"])
+        items, items_ids = [], []
+        for item in cart:
+            created_item = Item.objects.create(
+                product_id=item["product"],
+                quantity=item["quantity"],
+                price=item["price"],
+            )
+            items_ids.append(created_item.id)
+            items.append(created_item.__str__())
+        new_order.items.set(items_ids)
+
+        # send confirmation email
+        new_order.send_confirmation_mail()
+
+        return JsonResponse(
+            data={
+                gettext("Total price"): new_order.price_total,
+                gettext("Payment to"): new_order.payment_to,
+            }
+        )
+
 
 class ProductViewSet(ModelViewSet):
-    http_method_names = ["get", "post"]
+    permission_classes = [IsAuthenticated, IsVendor]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    pagination_class = ProductPagination
+
+    def get_permissions(self):
+        if self.action in ["list", "retrieve"]:
+            return []
+        else:
+            return super().get_permissions()
+
+    def list(self, request, *args, **kwargs):
+        query = self.request.query_params
+
+        # filter response
+        if "name" in query.keys():
+            self.queryset = self.queryset.filter(name__icontains=query.get("name"))
+        if "category" in query.keys():
+            self.queryset = self.queryset.filter(
+                category__name__iexact=query.get("category")
+            )
+        if "description" in query.keys():
+            self.queryset = self.queryset.filter(
+                description__icontains=query.get("description")
+            )
+        if "price" in query.keys():
+            self.queryset = self.queryset.filter(price=query["price"])
+
+        # sort response
+        if "sort" in query.keys():
+            self.queryset = self.queryset.order_by(query["sort"])
+
+        return super().list(request, *args, **kwargs)
+
+
+class StatsListView(ListView):
+    def get(self):
+        pass
