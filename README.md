@@ -20,6 +20,29 @@ Enter endpoint: <br>
 To make a User a Client or a Vendor add him to the group `Client` or `Vendor` respectively.<br>
 You can add one User to both groups.
 
+### Safety notice
+
+To make sure your application is secure, use environment variables.
+There are few important ones and few optional.
+
+##### Important environment variables:
+```
+SECRET_KEY=<create long and complicated string>
+DEFAULT_FROM_EMAIL=<put here the email address that is for outgoing email messages>
+```
+
+##### Optional environment variables:
+```
+SEND_PAYMENT_REMAINDER_EMAILS=<give True if you want to send payment remainder emails>
+```
+
+You can put above variables in one of the following ways:
+
+- create `.env` file in the main p roject folder (same place with i.e. `manage.py` file) - recommended
+- set them directly in your system
+
+#####
+
 ## Views
 
 ### Add Category

@@ -4,3 +4,4 @@ media/thumbnails
 __pycache__
 venv
 .idea/
+.env

@@ -21,3 +21,7 @@ class IsClient(BasePermission):
 class IsVendor(BasePermission):
     def has_permission(self, request, view):
         return request.user.groups.filter(name="Vendor").exists()
+
+
+def send_payment_notification_emails():
+    print("ZONK")

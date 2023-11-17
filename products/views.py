@@ -1,15 +1,16 @@
+from datetime import datetime
+
 from django.db.models import Sum
 from django.http import JsonResponse
+from django.utils.timezone import make_aware
 from django.utils.translation import gettext
 from rest_framework.mixins import ListModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet, ViewSet
-from datetime import datetime
-from django.utils.timezone import make_aware
 
 from .models import Category, Item, Order, Product
 from .serializers import CategorySerializer, OrderSerializer, ProductSerializer
-from .utils import IsClient, IsVendor, DefaultPagination
+from .utils import DefaultPagination, IsClient, IsVendor
 
 
 class CategoryViewSet(ModelViewSet):
@@ -107,16 +108,23 @@ class StatsViewSet(ViewSet, ListModelMixin):
 
         # filter items to dates given in params
         if "from" in query.keys():
-            date_from = make_aware(datetime.strptime(query["from"], '%d-%m-%Y'))
+            date_from = make_aware(datetime.strptime(query["from"], "%d-%m-%Y"))
             self.items = self.items.filter(created_at__gte=date_from)
         if "to" in query.keys():
-            date_from = make_aware(datetime.strptime(query["to"], '%d-%m-%Y'))
+            date_from = make_aware(datetime.strptime(query["to"], "%d-%m-%Y"))
             self.items = self.items.filter(created_at__lte=date_from)
 
         # sort products by most popular items
         stats = []
         for product in self.queryset:
-            stats.append({"product": product.__str__(), "total": self.items.filter(product_id=product.id).aggregate(Sum("quantity"))["quantity__sum"]})
+            stats.append(
+                {
+                    "product": product.__str__(),
+                    "total": self.items.filter(product_id=product.id).aggregate(
+                        Sum("quantity")
+                    )["quantity__sum"] or 0,
+                }
+            )
         stats.sort(key=lambda p: p["total"], reverse=True)
 
         # cut the size to fit the limit param
@@ -125,8 +133,6 @@ class StatsViewSet(ViewSet, ListModelMixin):
 
         # add positioning
         for i in range(len(stats)):
-            stats[i].update({"place": i+1})
+            stats[i].update({"place": i + 1})
 
-        return JsonResponse(
-            data=stats, safe=False
-        )
+        return JsonResponse(data=stats, safe=False)

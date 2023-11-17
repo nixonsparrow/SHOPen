@@ -10,8 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+from dotenv import load_dotenv
 import os
 from pathlib import Path
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "products",
     "rest_framework",
+    "django_apscheduler",
 ]
 
 MIDDLEWARE = [
@@ -134,3 +138,6 @@ EMAIL_BACKEND = os.environ.get(
 DEFAULT_FROM_EMAIL = os.environ.get(
     "DEFAULT_FROM_EMAIL", "dontusethatmailonproduction@please.com"
 )
+SEND_PAYMENT_REMAINDER_EMAILS = True if os.environ.get(
+    "SEND_PAYMENT_REMAINDER_EMAILS", "False"
+) == "True" else False

@@ -15,6 +15,7 @@ User = get_user_model()
 
 class BaseModel(models.Model):
     """Base abstract model to add fields for every other model."""
+
     class Meta:
         abstract = True
 
@@ -72,7 +73,7 @@ class Item(BaseModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="items")
     quantity = models.PositiveSmallIntegerField(_("quantity"), default=0)
     price = models.DecimalField(
-        _("unit price"), max_digits=8, decimal_places=2, null=False, blank=False
+        _("price"), max_digits=8, decimal_places=2, null=False, blank=False
     )
 
     def __str__(self):
