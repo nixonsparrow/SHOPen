@@ -25,15 +25,35 @@
             {% endfor %}
         {% endif %}
         <div class="col-md-12">
-            {% if user.is_authenticated %}
-                <div class="mb-2 float-right">
-                    <a href="{% url 'logout' %}">
-                        <button type="button" id="logout">
-                            {% translate "Logout" %}
-                        </button>
-                    </a>
-                </div>
-            {% endif %}
+            <div class="mb-2">
+                <a href="{% url 'homepage' %}">
+                    <button type="button" id="homepage">
+                        {% translate "Homepage" %}
+                    </button>
+                </a>
+                {% if user.is_authenticated %}
+                    <div class="mb-2 float-right">
+                        <a href="{% url 'logout' %}">
+                            <button type="button" id="logout">
+                                {% translate "Logout" %}
+                            </button>
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="mb-2 float-right">
+                        <a href="{% url 'login' %}">
+                            <button type="button" id="login">
+                                {% translate "Login" %}
+                            </button>
+                        </a>
+                        <a href="{% url 'register' %}">
+                            <button type="button" id="register">
+                                {% translate "Register" %}
+                            </button>
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
             {% block content %}
             {% endblock content %}
 

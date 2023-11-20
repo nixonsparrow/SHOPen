@@ -1,23 +1,15 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import (LoginRequiredMixin,
-                                        PermissionRequiredMixin,
-                                        UserPassesTestMixin)
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db import transaction
-from django.shortcuts import render, reverse
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-from django.utils import timezone
 from django.utils.translation import gettext
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import (CreateView, DeleteView, ListView,
-                                  TemplateView, UpdateView)
-from django.views.generic.edit import FormMixin
-from rest_framework import views
-from rest_framework.response import Response
+from django.views.generic import CreateView, TemplateView
 
-from products.forms import OrderForm
+from products.forms import OrderForm, UserRegisterForm
 from products.models import Item, Order, Product
-from products.utils import IsClient
 
 
 class HomePage(TemplateView):
@@ -62,3 +54,20 @@ class OrderCreateView(
                 )
 
         return super().post(request, *args, **kwargs)
+
+
+def register(request):
+    if request.method == "POST":
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get("username")
+            messages.success(
+                request,
+                gettext("Ac account for %s has been created! You can now log in.")
+                % username,
+            )
+            return redirect("login")
+    else:
+        form = UserRegisterForm()
+    return render(request, "registration/register.html", {"form": form})

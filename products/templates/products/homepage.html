@@ -1,7 +1,14 @@
 {% extends 'products/base.html' %}
-{% load static crispy_forms_tags i18n %}
+{% load static crispy_forms_tags i18n check_group %}
 {% block content %}
-    <a href="{% url 'create-order' %}">
-        <button class="form-button" type="button">{% translate "Create Order" %}</button>
-    </a>
+    {% if user.is_authenticated %}
+        {% if user|is_client %}
+            <a href="{% url 'create-order' %}">
+                <button class="form-button" type="button">{% translate "Create Order" %}</button>
+            </a>
+        {% endif %}
+        {% if user|is_vendor %}
+            # TODO
+        {% endif %}
+    {% endif %}
 {% endblock content %}

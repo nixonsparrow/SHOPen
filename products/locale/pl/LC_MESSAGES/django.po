@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-20 15:36+0100\n"
+"POT-Creation-Date: 2023-11-20 18:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Nikodem Wróel nixonsparrow@gmail.com\n"
 "Language: \n"
@@ -112,11 +112,23 @@ msgstr "Uprzejma przypominajka"
 msgid "Your order of: %s has not been paid yet."
 msgstr "Twoje zamówienie: %s nie zostało jeszcze opłacone."
 
-#: .\templates\products\base.html:32
+#: .\templates\products\base.html:31
+msgid "Homepage"
+msgstr "Strona domowa"
+
+#: .\templates\products\base.html:38
 msgid "Logout"
 msgstr "Wyloguj"
 
-#: .\templates\products\homepage.html:5
+#: .\templates\products\base.html:46
+msgid "Login"
+msgstr "Zaloguj się"
+
+#: .\templates\products\base.html:51 .\templates\registration\register.html:12
+msgid "Register"
+msgstr "Zarejestruj się"
+
+#: .\templates\products\homepage.html:7
 msgid "Create Order"
 msgstr "Stwórz zamówienie"
 
@@ -148,6 +160,15 @@ msgstr "Ilość"
 msgid "In stock"
 msgstr "Na stanie"
 
+#: .\templates\registration\login.html:8
+#: .\templates\registration\register.html:17
+msgid "Log in"
+msgstr "Zaloguj się"
+
+#: .\templates\registration\login.html:12
+msgid "Log in!"
+msgstr "Zaloguj się!"
+
 #: .\templates\registration\login.html:17
 msgid "Don't have an account yet?"
 msgstr "Nie masz jeszcze konta?"
@@ -160,6 +181,14 @@ msgstr "Zarejestruj się!"
 msgid "Login back"
 msgstr "Zaloguj się ponownie"
 
+#: .\templates\registration\register.html:8
+msgid "Register form"
+msgstr "Formularz rejestracyjny"
+
+#: .\templates\registration\register.html:17
+msgid "Already have an account?"
+msgstr "Masz już konto?"
+
 #: .\views.py:33
 msgid "Add Order"
 msgstr "Dodaj Zamówienie"
@@ -167,6 +196,11 @@ msgstr "Dodaj Zamówienie"
 #: .\views.py:36
 msgid "Order has been successfully added to the database."
 msgstr "Zamówienie zostało poprawnie dodane do bazy danych."
+
+#: .\views.py:73
+#, python-format
+msgid "Ac account for %s has been created! You can now log in."
+msgstr "Konto dla %s zostało utworzone! Możesz się zalogować."
 
 #: .\views_api.py:58
 msgid "Total price"

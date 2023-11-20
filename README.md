@@ -20,6 +20,10 @@ Enter endpoint: <br>
 To make a User a Client or a Vendor add him to the group `Client` or `Vendor` respectively.<br>
 You can add one User to both groups.
 
+To process translations for polish run command:
+
+`python manage.py compilemessages -l pl`
+
 To start a service for task queue use another, separated terminal and run command:
 
 `python manage.py start_scheduler`
