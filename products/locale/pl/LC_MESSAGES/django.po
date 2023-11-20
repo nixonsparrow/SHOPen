@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-20 01:12+0100\n"
+"POT-Creation-Date: 2023-11-20 15:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Nikodem Wróel nixonsparrow@gmail.com\n"
 "Language: \n"
@@ -99,22 +99,79 @@ msgid "Order confirmed"
 msgstr "Zamówienie potwierdzone"
 
 #: .\models.py:117
-msgid "Your order of: {self.get_items_string()} has been confirmed."
-msgstr "Twoje zamówienie: {self.get_items_string()} zostało potwierdzone."
+#, python-format
+msgid "Your order of: %s has been confirmed."
+msgstr "Twoje zamówienie: %s zostało potwierdzone."
 
 #: .\models.py:129
 msgid "Kindly remainder"
 msgstr "Uprzejma przypominajka"
 
 #: .\models.py:131
-msgid "Your order of: {self.get_items_string()} has not been paid yet."
-msgstr ""
-"Twoje zamówienie: {self.get_items_string()} nie zostało jeszcze opłacone"
+#, python-format
+msgid "Your order of: %s has not been paid yet."
+msgstr "Twoje zamówienie: %s nie zostało jeszcze opłacone."
 
-#: .\views.py:58
+#: .\templates\products\base.html:32
+msgid "Logout"
+msgstr "Wyloguj"
+
+#: .\templates\products\homepage.html:5
+msgid "Create Order"
+msgstr "Stwórz zamówienie"
+
+#: .\templates\products\order_form.html:7
+msgid "Order form"
+msgstr "Formularz zamówienia"
+
+#: .\templates\products\order_form.html:12
+msgid "Add"
+msgstr "Dodaj"
+
+#: .\templates\products\order_form.html:17
+msgid "Reset"
+msgstr "Resetuj"
+
+#: .\templates\products\order_form.html:22
+msgid "Cancel"
+msgstr "Anuluj"
+
+#: .\templates\products\order_form.html:29
+msgid "Product name"
+msgstr "Nazwa produktu"
+
+#: .\templates\products\order_form.html:30
+msgid "Quantity"
+msgstr "Ilość"
+
+#: .\templates\products\order_form.html:31
+msgid "In stock"
+msgstr "Na stanie"
+
+#: .\templates\registration\login.html:17
+msgid "Don't have an account yet?"
+msgstr "Nie masz jeszcze konta?"
+
+#: .\templates\registration\login.html:17
+msgid "Register!"
+msgstr "Zarejestruj się!"
+
+#: .\templates\registration\logout.html:12
+msgid "Login back"
+msgstr "Zaloguj się ponownie"
+
+#: .\views.py:33
+msgid "Add Order"
+msgstr "Dodaj Zamówienie"
+
+#: .\views.py:36
+msgid "Order has been successfully added to the database."
+msgstr "Zamówienie zostało poprawnie dodane do bazy danych."
+
+#: .\views_api.py:58
 msgid "Total price"
 msgstr "Pełna cena"
 
-#: .\views.py:59
+#: .\views_api.py:59
 msgid "Payment to"
 msgstr "Płatność do"

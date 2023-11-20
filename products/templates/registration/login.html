@@ -1,0 +1,21 @@
+{% extends 'products/base.html' %}
+{% load crispy_forms_tags i18n %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Logowanie</legend>
+                {{ form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="dirty-button btn" type="submit">Zaloguj się!</button>
+            </div>
+        </form>
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                {% translate "Don't have an account yet?" %} <a class="ml-2" href="">{% translate "Register!" %}</a>
+            </small>
+        </div>
+    </div>
+{% endblock content %}

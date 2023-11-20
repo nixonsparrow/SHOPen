@@ -1,0 +1,7 @@
+{% extends 'products/base.html' %}
+{% load static crispy_forms_tags i18n %}
+{% block content %}
+    <a href="{% url 'create-order' %}">
+        <button class="form-button" type="button">{% translate "Create Order" %}</button>
+    </a>
+{% endblock content %}

@@ -1,0 +1,16 @@
+{% extends 'products/base.html' %}
+{% load crispy_forms_tags i18n %}
+{% block content %}
+    <div class="content-section">
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                You have been logged out.
+            </small>
+        </div>
+        <a href="{% url 'login' %}">
+            <button type="button" id="login">
+                {% translate "Login back" %}
+            </button>
+        </a>
+    </div>
+{% endblock content %}

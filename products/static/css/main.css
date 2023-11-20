@@ -1,0 +1,9 @@
+body {
+    background-color: darkgrey;
+    margin: 2rem;
+}
+
+.product-table {
+    background-color: white;
+    width: 100%;
+}

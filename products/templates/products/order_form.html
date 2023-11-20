@@ -1,0 +1,43 @@
+{% extends 'products/base.html' %}
+{% load static crispy_forms_tags i18n %}
+{% block content %}
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="border-bottom mb-2">
+                <legend class="border-bottom mb-2">{% translate "Order form" %}</legend>
+                    {{ form|crispy }}
+            </fieldset>
+            <div class="d-flex">
+                <button type="submit" id="submit_button">
+                    {% translate "Add" %}
+                </button>
+
+                <button type="reset" id="reset_button"
+                        onclick="return confirm('You are going to reset form values. Proceed?');">
+                    {% translate "Reset" %}
+                </button>
+
+                <a href="{% url 'homepage' %}">
+                    <button type="button" id="cancel_button">
+                        {% translate "Cancel" %}
+                    </button>
+                </a>
+            </div>
+
+            <table class="product-table mt-2">
+                <tr>
+                    <th>{% translate "Product name" %}</th>
+                    <th>{% translate "Quantity" %}</th>
+                    <th>{% translate "In stock" %}</th>
+                </tr>
+            {% for product in products %}
+                <tr>
+                    <th>{{ product }}</th>
+                    <th><input type="number" name="product_{{ product.id }}" value="0" max="{{ product.quantity }}" min="0"></th>
+                    <th>{{ product.quantity }}</th>
+                </tr>
+            {% endfor %}
+
+            </table>
+        </form>
+{% endblock content %}

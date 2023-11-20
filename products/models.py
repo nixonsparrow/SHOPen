@@ -114,8 +114,8 @@ class Order(BaseModel):
     def send_confirmation_mail(self):
         subject = gettext("Order confirmed")
         message = gettext(
-            f"Your order of: {self.get_items_string()} has been confirmed."
-        )
+            "Your order of: %s has been confirmed."
+        ) % self.get_items_string()
 
         send_mail(
             subject=subject,
@@ -128,8 +128,8 @@ class Order(BaseModel):
     def send_remainder_mail(self):
         subject = gettext("Kindly remainder")
         message = gettext(
-            f"Your order of: {self.get_items_string()} has not been paid yet."
-        )
+            "Your order of: %s has not been paid yet."
+        ) % self.get_items_string()
 
         send_mail(
             subject=subject,
