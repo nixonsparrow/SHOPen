@@ -20,6 +20,12 @@ Enter endpoint: <br>
 To make a User a Client or a Vendor add him to the group `Client` or `Vendor` respectively.<br>
 You can add one User to both groups.
 
+To start a service for task queue use another, separated terminal and run command:
+
+`python manage.py start_scheduler`
+
+You need to set the environment variable `SEND_PAYMENT_REMAINDER_EMAILS` to `True`.
+
 ### Safety notice
 
 To make sure your application is secure, use environment variables.
@@ -29,6 +35,8 @@ There are few important ones and few optional.
 ```
 SECRET_KEY=<create long and complicated string>
 DEFAULT_FROM_EMAIL=<put here the email address that is for outgoing email messages>
+ALLOWED_HOSTS=<put hosts here separated by a comma - `,`>
+DEBUG_MODE=<give True if you want to enable DEBUG mode to Django>
 ```
 
 ##### Optional environment variables:
@@ -38,7 +46,7 @@ SEND_PAYMENT_REMAINDER_EMAILS=<give True if you want to send payment remainder e
 
 You can put above variables in one of the following ways:
 
-- create `.env` file in the main p roject folder (same place with i.e. `manage.py` file) - recommended
+- create `.env` file in the main project folder (same place with i.e. `manage.py` file) - recommended
 - set them directly in your system
 
 #####

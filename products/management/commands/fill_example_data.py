@@ -41,7 +41,8 @@ class Command(BaseCommand):
         products_arg = options["products"] or self.products_arg
 
         self.stdout.write(
-            "Preparing to create: %s categories, %s products and %s items..." % (categories_arg, products_arg, items_arg)
+            "Preparing to create: %s categories, %s products and %s items..."
+            % (categories_arg, products_arg, items_arg)
         )
 
         try:

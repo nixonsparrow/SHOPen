@@ -122,7 +122,8 @@ class StatsViewSet(ViewSet, ListModelMixin):
                     "product": product.__str__(),
                     "total": self.items.filter(product_id=product.id).aggregate(
                         Sum("quantity")
-                    )["quantity__sum"] or 0,
+                    )["quantity__sum"]
+                    or 0,
                 }
             )
         stats.sort(key=lambda p: p["total"], reverse=True)

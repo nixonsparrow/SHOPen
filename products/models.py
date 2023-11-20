@@ -70,6 +70,10 @@ class Item(BaseModel):
     """Item is an object that puts Product in Cart with wanted quantity.
     Price field is needed because the price can be different from current one."""
 
+    class Meta:
+        verbose_name = _("item")
+        verbose_name_plural = _("items")
+
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="items")
     quantity = models.PositiveSmallIntegerField(_("quantity"), default=0)
     price = models.DecimalField(
@@ -82,6 +86,10 @@ class Item(BaseModel):
 
 class Order(BaseModel):
     """Order that User with role Client can place and purchase products by."""
+
+    class Meta:
+        verbose_name = _("order")
+        verbose_name_plural = _("orders")
 
     client = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="orders", null=False, blank=False
@@ -107,6 +115,20 @@ class Order(BaseModel):
         subject = gettext("Order confirmed")
         message = gettext(
             f"Your order of: {self.get_items_string()} has been confirmed."
+        )
+
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[self.client.email],
+            fail_silently=False,
+        )
+
+    def send_remainder_mail(self):
+        subject = gettext("Kindly remainder")
+        message = gettext(
+            f"Your order of: {self.get_items_string()} has not been paid yet."
         )
 
         send_mail(
